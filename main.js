@@ -44,8 +44,11 @@ function playerXMove($tile){
 
   if (checkForWin(gameApp.playerXtiles)){
     gameWon("X");
+  } else {
+  checkForStaleMate();
   }
 }
+
 
 
 function playerOMove($tile){
@@ -57,12 +60,16 @@ function playerOMove($tile){
 
   if (checkForWin(gameApp.playerOtiles)){
     gameWon("O");
-}
+} else {
+  checkForStaleMate();
+  }
 }
 
 
 function checkForStaleMate(){
-  return gameApp.playerXtiles.concat(gameApp.playerOtiles).length === 9;
+  if(gameApp.playerXtiles.concat(gameApp.playerOtiles).length === 9) {
+    $('h1').text("It's a stalemate!");
+  }
 }
 
 

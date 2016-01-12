@@ -8,6 +8,9 @@ body{
   min-height: 50px;
 }
 
+.row{
+  border: 2px solid snow;
+}
 
 .unselectable{
   pointer-events:none;

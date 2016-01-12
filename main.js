@@ -25,15 +25,11 @@ function startGame(){
 }
 
 function makeBoard(rowLength){
-  console.log("make board")
-  console.log("row length,", rowLength);
 
   var size = 12 / rowLength;
   for (var i = 0; i < rowLength * rowLength; i++){
-    console.log("make tile", "row length", rowLength, "size", size)
   $("#board").append($("<div class='col-xs-" + String(size) + " tile' data-tile=" + i +"></div>"));
   }
-
   $('.tile').click(tileClicked);
   $('#start').off('click');
 }
@@ -129,7 +125,6 @@ function getRows(rowLength){
   return sublists;
 }
 
-
 function isStartOfRow(position, rowLength){
   var starts = [0];
   var numPositions = rowLength * rowLength;
@@ -138,7 +133,6 @@ function isStartOfRow(position, rowLength){
   }
   return starts.indexOf(position) > -1;
 }
-
 
 function getColumns(rowLength){
   var numRows = rowLength;
@@ -157,11 +151,9 @@ function getColumns(rowLength){
   return sublists;
 }
 
-
 function isStartOfColumn(position, rowLength){
   return range(rowLength).indexOf(position) > -1;
 }
-
 
 function getRightDiagonal(rowLength){
   var numRows = rowLength;
@@ -188,7 +180,6 @@ function getLeftDiagonal(rowLength){
 }
 
 
-
 // stackover flow range function
 function range(start, stop, step) {
     if (typeof stop == 'undefined') {
@@ -209,7 +200,6 @@ function range(start, stop, step) {
 };
 
 
-
 function containsSubset(set, possibleSubsetsArray){
   for (var i = 0; i < possibleSubsetsArray.length; i++){
       var count = 0;
@@ -224,12 +214,6 @@ function containsSubset(set, possibleSubsetsArray){
   } return false;
 }
 
-
-
-
-
-
-
 function gameWon(playerSymbol){
   $('h3').text('Player ' + playerSymbol + ' wins!!');
   $('.tile').addClass("animated rubberBand");
@@ -242,8 +226,10 @@ function reset(){
    playerOtiles : [],
    currentPlayer : "X"
   }
-  $('.tile').removeClass('unselectable');
-  $('.tile').empty();
+
+  $('.tile').remove();
+  $('#board').empty();
   $('h3').text("Player X begins the game:");
   $('h3').removeClass().css({color: "black", fontWeight: "normal" });
+  clickHandler();
 }

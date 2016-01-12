@@ -26,7 +26,7 @@ function startGame(){
 function makeBoard(rowLength){
   var size = 12 / rowLength;
   for (var i = 0; i < rowLength * rowLength; i++){
-  $("#board").append($("<div class='col-xs-" + String(size) + " tile' data-tile=" + i +"></div>"));
+    $("#board").append($("<div>").addClass('col-xs-' + size + ' tile').data("tile", i));
   }
   $('.tile').click(tileClicked);
   $('#start').off('click');
@@ -39,6 +39,9 @@ function tileClicked(event){
     playerOMove($(this));
   }
 }
+
+
+// use gameApp[playerSymbol] to condense the two player move functions into 1
 
 function playerXMove($tile){
   $('h3').text("Player O's move:");

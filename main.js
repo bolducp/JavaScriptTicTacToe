@@ -34,59 +34,26 @@ function makeBoard(rowLength){
 
 function tileClicked(event){
   if (gameApp.currentPlayer === "X"){
-    playerXMove($(this));
+    playerMove($(this), "X");
   } else {
-    playerOMove($(this));
+    playerMove($(this), "O");
   }
 }
 
-
-// use gameApp[playerSymbol] to condense the two player move functions into 1
-function playerXMove($tile, playerSymbol){
+function playerMove($tile, playerSymbol){
   $('h3').text("Player " + playerSymbol + "'s move:");
   $tile.append($('<div>').text(playerSymbol));
   $tile.addClass('unselectable');
   gameApp["player" + playerSymbol + "tiles"].push($tile.data("tile"));
 
-  if (gameApp.currentPlayer = "X") {
+  if (gameApp.currentPlayer === "X") {
     gameApp.currentPlayer = "O";
-  } else if (gameApp.currentPlayer = "O") {
+  } else if (gameApp.currentPlayer === "O") {
     gameApp.currentPlayer = "X";
   }
   if (checkForWin(gameApp["player" + playerSymbol + "tiles"])){
     gameWon(playerSymbol);
   } else {
-  checkForStaleMate();
-  }
-}
-
-
-function playerXMove($tile){
-  $('h3').text("Player O's move:");
-  $tile.append($('<div>X</div>'));
-  $tile.addClass('unselectable');
-  gameApp.playerXtiles.push($tile.data("tile"));
-  gameApp.currentPlayer = "O";
-
-  if (checkForWin(gameApp.playerXtiles)){
-    $(".tile").addClass("unselectable");
-    gameWon("X");
-  } else {
-  checkForStaleMate();
-  }
-}
-
-function playerOMove($tile){
-  $('h3').text("Player X's move:");
-  $tile.append($('<div>O</div>'));
-  $tile.addClass('unselectable');
-  gameApp.playerOtiles.push($tile.data("tile"));
-  gameApp.currentPlayer = "X";
-
-  if (checkForWin(gameApp.playerOtiles)){
-    $(".tile").addClass("unselectable");
-    gameWon("O");
-} else {
   checkForStaleMate();
   }
 }

@@ -3,6 +3,7 @@
 $(document).ready(init);
 
 var gameApp = {};
+gameApp.rowLength;
 gameApp.playerXtiles = [];
 gameApp.playerOtiles = [];
 gameApp.currentPlayer = "X";
@@ -14,7 +15,29 @@ function init(){
 function clickHandler(){
   $('.tile').click(tileClicked);
   $('#reset').click(reset);
+  $('#start').click(startGame);
 }
+
+function startGame(){
+  gameApp.rowLength = parseInt($('#quantity').val());
+  makeBoard(gameApp.rowLength);
+
+}
+
+function makeBoard(rowLength){
+  console.log("make board")
+  console.log("row length,", rowLength);
+
+  var size = 12 / rowLength;
+  for (var i = 0; i < rowLength * rowLength; i++){
+    console.log("make tile", "row length", rowLength, "size", size)
+  $("#board").append($("<div class='col-xs-" + String(size) + " tile' data-tile=" + i +"></div>"));
+  }
+
+  $('.tile').click(tileClicked);
+  $('#start').off('click');
+}
+
 
 function tileClicked(event){
   if (gameApp.currentPlayer === "X"){
@@ -55,28 +78,157 @@ function playerOMove($tile){
 }
 
 function checkForStaleMate(){
-  if(gameApp.playerXtiles.concat(gameApp.playerOtiles).length === 9) {
+  if(gameApp.playerXtiles.concat(gameApp.playerOtiles).length === gameApp.rowLength * gameApp.rowLength) {
     $('h3').text("It's a stalemate!");
   }
 }
 
 function checkForWin(playerTiles){
   var playerTilesArray = playerTiles.concat();
-  var winningCombos = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7],
-        [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+  var winningCombos = getWinningCombos(gameApp.rowLength);
+  return containsSubset(playerTilesArray, winningCombos);
+}
 
-  for (var i = 0; i < winningCombos.length; i++){
-      var playerCount = 0;
-      for (var j = 0; j < winningCombos[i].length; j++){
-        if (playerTilesArray.indexOf(winningCombos[i][j]) > -1){
-          playerCount += 1;
+function getWinningCombos(rowLength){
+  var winningCombos = [];
+  var rows = getRows(rowLength);
+  var columns = getColumns(rowLength);
+  var rightDiagonal = getRightDiagonal(rowLength);
+  var leftDiagonal = getLeftDiagonal(rowLength);
+
+  joinArrayOfArrays(winningCombos, rows);
+  joinArrayOfArrays(winningCombos, columns);
+  joinArrayOfArrays(winningCombos, rightDiagonal);
+  joinArrayOfArrays(winningCombos, leftDiagonal);
+
+  return winningCombos;
+
+}
+
+function joinArrayOfArrays(main, newList){
+  for (var i = 0; i < newList.length; i++){
+    main.push(newList[i]);
+  }
+}
+
+function getRows(rowLength){
+  var numRows = rowLength;
+  var positions = range(rowLength * rowLength);
+  var sublists = [];
+
+  for (var i = 0; i < positions.length; i++){
+    if (isStartOfRow(positions[i], rowLength)){
+      console.log("is start", positions[i]);
+      var sublist = [];
+      for (var j = 0; j < numRows; j++){
+        sublist.push(positions[i] + j);
+      }
+      sublists.push(sublist);
+    }
+  }
+  return sublists;
+}
+
+
+function isStartOfRow(position, rowLength){
+  var starts = [0];
+  var numPositions = rowLength * rowLength;
+  for (var i = rowLength; i < numPositions; i += rowLength){
+    starts.push(i);
+  }
+  return starts.indexOf(position) > -1;
+}
+
+
+function getColumns(rowLength){
+  var numRows = rowLength;
+  var positions = range(rowLength * rowLength);
+  var sublists = [];
+
+  for (var i = 0; i < positions.length; i++){
+    if (isStartOfColumn(positions[i], rowLength)){
+      var sublist = [];
+      for (var j = 0; j < numRows; j++){
+        sublist.push(positions[i] + rowLength * j)
+      }
+      sublists.push(sublist);
+    }
+  }
+  return sublists;
+}
+
+
+function isStartOfColumn(position, rowLength){
+  return range(rowLength).indexOf(position) > -1;
+}
+
+
+function getRightDiagonal(rowLength){
+  var numRows = rowLength;
+  var positions = range(rowLength * rowLength);
+  var diagonal = [];
+  var startDiagonal = positions[rowLength - 1];
+
+  for (var i = 0; i < numRows; i++){
+    diagonal.push(startDiagonal + ((rowLength - 1) * i))
+  }
+  return [diagonal];
+}
+
+function getLeftDiagonal(rowLength){
+  var numRows = rowLength;
+  var positions = range(rowLength * rowLength);
+  var diagonal = [];
+  var startDiagonal = positions[0];
+
+  for (var i = 0; i < numRows; i++){
+    diagonal.push(startDiagonal + ((rowLength + 1) * i))
+  }
+  return [diagonal];
+}
+
+
+
+// stackover flow range function
+function range(start, stop, step) {
+    if (typeof stop == 'undefined') {
+        stop = start;
+        start = 0;
+    }
+    if (typeof step == 'undefined') {
+        step = 1;
+    }
+    if ((step > 0 && start >= stop) || (step < 0 && start <= stop)) {
+        return [];
+    }
+    var result = [];
+    for (var i = start; step > 0 ? i < stop : i > stop; i += step) {
+        result.push(i);
+    }
+    return result;
+};
+
+
+
+function containsSubset(set, possibleSubsetsArray){
+  for (var i = 0; i < possibleSubsetsArray.length; i++){
+      var count = 0;
+      for (var j = 0; j < possibleSubsetsArray[i].length; j++){
+        if (set.indexOf(possibleSubsetsArray[i][j]) > -1){
+          count += 1;
         }
-      if (playerCount === 3){
+      if (count === possibleSubsetsArray[0].length){
         return true;
       }
     }
   } return false;
 }
+
+
+
+
+
+
 
 function gameWon(playerSymbol){
   $('h3').text('Player ' + playerSymbol + ' wins!!');

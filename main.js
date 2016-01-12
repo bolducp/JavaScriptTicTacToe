@@ -80,6 +80,7 @@ function checkForWin(playerTiles){
 
 function gameWon(playerSymbol){
   $('h3').text('Player ' + playerSymbol + ' wins!!');
+  $('.tile').addClass("animated rubberBand");
   $('h3').css({color: "DarkSalmon", fontWeight: "bolder" }).addClass("animated jello");
 }
 

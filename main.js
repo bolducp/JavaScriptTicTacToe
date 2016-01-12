@@ -21,11 +21,9 @@ function clickHandler(){
 function startGame(){
   gameApp.rowLength = parseInt($('#quantity').val());
   makeBoard(gameApp.rowLength);
-
 }
 
 function makeBoard(rowLength){
-
   var size = 12 / rowLength;
   for (var i = 0; i < rowLength * rowLength; i++){
   $("#board").append($("<div class='col-xs-" + String(size) + " tile' data-tile=" + i +"></div>"));
@@ -33,7 +31,6 @@ function makeBoard(rowLength){
   $('.tile').click(tileClicked);
   $('#start').off('click');
 }
-
 
 function tileClicked(event){
   if (gameApp.currentPlayer === "X"){

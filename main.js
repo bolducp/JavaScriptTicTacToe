@@ -42,6 +42,24 @@ function tileClicked(event){
 
 
 // use gameApp[playerSymbol] to condense the two player move functions into 1
+function playerXMove($tile, playerSymbol){
+  $('h3').text("Player " + playerSymbol + "'s move:");
+  $tile.append($('<div>').text(playerSymbol));
+  $tile.addClass('unselectable');
+  gameApp["player" + playerSymbol + "tiles"].push($tile.data("tile"));
+
+  if (gameApp.currentPlayer = "X") {
+    gameApp.currentPlayer = "O";
+  } else if (gameApp.currentPlayer = "O") {
+    gameApp.currentPlayer = "X";
+  }
+  if (checkForWin(gameApp["player" + playerSymbol + "tiles"])){
+    gameWon(playerSymbol);
+  } else {
+  checkForStaleMate();
+  }
+}
+
 
 function playerXMove($tile){
   $('h3').text("Player O's move:");
@@ -177,8 +195,7 @@ function getLeftDiagonal(rowLength){
   return [diagonal];
 }
 
-
-// stackover flow range function
+// srange function from stackoverflow
 function range(start, stop, step) {
     if (typeof stop == 'undefined') {
         stop = start;

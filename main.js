@@ -21,13 +21,10 @@ function clickHandler(){
 function startGame(){
   gameApp.rowLength = parseInt($('#quantity').val());
   makeBoard(gameApp.rowLength);
-  console.log("gameApp.rowLength", gameApp.rowLength);
 }
 
 function makeBoard(rowLength){
-  console.log("num divs tiles", $('.tile').length)
   var size = 12 / rowLength;
-  console.log("rowLength for making board", rowLength);
   for (var i = 0; i < rowLength * rowLength; i++){
   $("#board").append($("<div class='col-xs-" + String(size) + " tile' data-tile=" + i +"></div>"));
   }
@@ -98,7 +95,6 @@ function getWinningCombos(rowLength){
   joinArrayOfArrays(winningCombos, leftDiagonal);
 
   return winningCombos;
-
 }
 
 function joinArrayOfArrays(main, newList){
@@ -197,7 +193,6 @@ function range(start, stop, step) {
     }
     return result;
 };
-
 
 function containsSubset(set, possibleSubsetsArray){
   for (var i = 0; i < possibleSubsetsArray.length; i++){

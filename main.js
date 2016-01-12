@@ -21,10 +21,13 @@ function clickHandler(){
 function startGame(){
   gameApp.rowLength = parseInt($('#quantity').val());
   makeBoard(gameApp.rowLength);
+  console.log("gameApp.rowLength", gameApp.rowLength);
 }
 
 function makeBoard(rowLength){
+  console.log("num divs tiles", $('.tile').length)
   var size = 12 / rowLength;
+  console.log("rowLength for making board", rowLength);
   for (var i = 0; i < rowLength * rowLength; i++){
   $("#board").append($("<div class='col-xs-" + String(size) + " tile' data-tile=" + i +"></div>"));
   }
@@ -111,7 +114,6 @@ function getRows(rowLength){
 
   for (var i = 0; i < positions.length; i++){
     if (isStartOfRow(positions[i], rowLength)){
-      console.log("is start", positions[i]);
       var sublist = [];
       for (var j = 0; j < numRows; j++){
         sublist.push(positions[i] + j);
@@ -218,15 +220,5 @@ function gameWon(playerSymbol){
 }
 
 function reset(){
-  gameApp = {
-   playerXtiles : [],
-   playerOtiles : [],
-   currentPlayer : "X"
-  }
-
-  $('.tile').remove();
-  $('#board').empty();
-  $('h3').text("Player X begins the game:");
-  $('h3').removeClass().css({color: "black", fontWeight: "normal" });
-  clickHandler();
+  location.reload();
 }

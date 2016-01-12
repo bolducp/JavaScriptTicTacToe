@@ -7,71 +7,58 @@ gameApp.playerXtiles = [];
 gameApp.playerOtiles = [];
 gameApp.currentPlayer = "X";
 
-
 function init(){
-  makeBoard();
   clickHandler();
 }
 
-
 function clickHandler(){
   $('.tile').click(tileClicked);
- //$('#reset').click(reset);
- //$('#start').click(startGame);
+  $('#reset').click(reset);
 }
-
 
 function tileClicked(event){
   if (gameApp.currentPlayer === "X"){
     playerXMove($(this));
-    console.log("x's move");
   } else {
     playerOMove($(this));
-    console.log("o's move");
   }
 }
 
-
-
-
 function playerXMove($tile){
-  console.log($tile);
-  $('h1').text("Player O's move:");
+  $('h3').text("Player O's move:");
   $tile.append($('<div>X</div>'));
   $tile.addClass('unselectable');
   gameApp.playerXtiles.push($tile.data("tile"));
   gameApp.currentPlayer = "O";
 
   if (checkForWin(gameApp.playerXtiles)){
+    $(".tile").addClass("unselectable");
     gameWon("X");
   } else {
   checkForStaleMate();
   }
 }
 
-
-
 function playerOMove($tile){
-  $('h1').text("Player X's move:");
+  $('h3').text("Player X's move:");
   $tile.append($('<div>O</div>'));
   $tile.addClass('unselectable');
   gameApp.playerOtiles.push($tile.data("tile"));
   gameApp.currentPlayer = "X";
 
   if (checkForWin(gameApp.playerOtiles)){
+    $(".tile").addClass("unselectable");
     gameWon("O");
 } else {
   checkForStaleMate();
   }
 }
 
-
 function checkForStaleMate(){
   if(gameApp.playerXtiles.concat(gameApp.playerOtiles).length === 9) {
-    $('h1').text("It's a stalemate!");
+    $('h3').text("It's a stalemate!");
   }
 }
-
 
 function checkForWin(playerTiles){
   var playerTilesArray = playerTiles.concat();
@@ -91,11 +78,19 @@ function checkForWin(playerTiles){
   } return false;
 }
 
-
 function gameWon(playerSymbol){
-  $('h1').text('Player ' + playerSymbol + ' wins!!');
+  $('h3').text('Player ' + playerSymbol + ' wins!!');
+  $('h3').css({color: "DarkSalmon", fontWeight: "bolder" }).addClass("animated jello");
 }
 
-
-function makeBoard(){
+function reset(){
+  gameApp = {
+   playerXtiles : [],
+   playerOtiles : [],
+   currentPlayer : "X"
+  }
+  $('.tile').removeClass('unselectable');
+  $('.tile').empty();
+  $('h3').text("Player X begins the game:");
+  $('h3').removeClass().css({color: "black", fontWeight: "normal" });
 }
